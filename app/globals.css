@@ -1,31 +1,26 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-:root {
-  --maroon: #4a0019;
-  --brand: #e11d48;
+/* সবুজ রং */
+[data-theme="light"] {
+  --color-primary: oklch(55% 0.17 150);
+  --color-primary-content: #ffffff;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  background: #fff7f9;
-  color: #3b0a1c;
-}
-
+/* দামের চলন্ত পট্টি */
 @keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marquee 40s linear infinite;
+.animate-marquee {
+  animation: marquee 80s linear infinite;
 }
 
-.marquee-track:hover {
+.animate-marquee:hover {
   animation-play-state: paused;
 }
