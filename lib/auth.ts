@@ -9,6 +9,13 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  // একই ইমেইলের অ্যাকাউন্টগুলো নিজে নিজে জুড়ে দেবে
+  account: {
+    accountLinking: {
+      enabled: true,
+      trustedProviders: ["google", "github"],
+    },
+  },
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
