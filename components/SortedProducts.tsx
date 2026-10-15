@@ -1,17 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import type { Product } from "@/lib/types";
 import ProductCard from "./ProductCard";
+import { CardGridSkeleton } from "./Skeletons";
 
 type Sort = "default" | "asc" | "desc";
 
 export default function SortedProducts({ products }: { products: Product[] }) {
   const [sort, setSort] = useState<Sort>("default");
+  const [loading, setLoading] = useState(true);
 
-  // দাম সংখ্যা (number) হিসেবে সাজানো হয়, লেখা হিসেবে নয়।
-  // তাই বাংলা অঙ্কে দেখানো দামও ঠিক ক্রমে আসে।
+  // তালিকা দেখানোর আগে অল্প সময় স্কেলেটন দেখানো হয়
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 600);
+    return () => clearTimeout(t);
+  }, []);
+
+  // দাম সংখ্যা (number) হিসেবে সাজানো হয়, লেখা হিসেবে নয়
   const list = [...products];
   if (sort === "asc") list.sort((a, b) => a.today - b.today);
   if (sort === "desc") list.sort((a, b) => b.today - a.today);
@@ -40,11 +47,18 @@ export default function SortedProducts({ products }: { products: Product[] }) {
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {list.map((p) => (
-          <ProductCard key={p.id} product={p} />
-        ))}
-      </div>
+      {loading ? (
+        <div>
+          <p className="mb-4 text-gray-600">লোড হচ্ছে...</p>
+          <CardGridSkeleton count={products.length} />
+        </div>
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {list.map((p) => (
+            <ProductCard key={p.id} product={p} />
+          ))}
+        </div>
+      )}
     </>
   );
 }

@@ -1,6 +1,7 @@
 import { getCategoryBySlug, getProductsByCategory } from "@/lib/api";
-import SortedProducts from "@/components/SortedProducts";
+import { toBn } from "@/lib/format";
 import EmptyState from "@/components/EmptyState";
+import SortedProducts from "@/components/SortedProducts";
 
 export default async function CategoryPage({
   params,
@@ -13,6 +14,7 @@ export default async function CategoryPage({
     getProductsByCategory(slug),
   ]);
 
+  // ক্যাটাগরি না থাকলে বা কোনো পণ্য না থাকলে
   if (!category || products.length === 0) {
     return (
       <EmptyState
@@ -24,10 +26,14 @@ export default async function CategoryPage({
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
-      <h1 className="mb-6 text-3xl font-bold text-gray-900">
+      <h1 className="text-3xl font-bold text-gray-900">
         {category.icon} {category.nameBn}
       </h1>
-      <SortedProducts products={products} />
+      <p className="mb-6 text-gray-600">
+        {toBn(products.length)}টি পণ্যের আজকের দাম
+      </p>
+      {/* key দেওয়ায় প্রতিটা ক্যাটাগরিতে সাজান ও লোডিং নতুন করে শুরু হয় */}
+      <SortedProducts key={category.slug} products={products} />
     </div>
   );
 }
